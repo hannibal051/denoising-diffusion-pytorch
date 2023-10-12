@@ -1,0 +1,11 @@
+unet:
+  base_channel_count: 32 
+train:
+  num_epochs: 501
+  batch_size: 128 
+  dataset: elevation
+  data_root: ./data/elevation
+  model_save_dir: ./result/elevation_experiment-3
+
+eval:
+  val_epochs: 20

@@ -1,0 +1,8 @@
+unet:
+  base_channel_count: 32 
+train:
+  num_epochs: 3  ## 201
+  batch_size: 64  ## 128
+  dataset: elevation
+  data_root: /home/sp/Downloads/elevation
+  model_save_dir: ./result

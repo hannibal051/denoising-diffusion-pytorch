@@ -1,0 +1,6 @@
+*/__pycache__/
+.ipynb_checkpoints/
+media/
+result/
+data/
+trained_models/

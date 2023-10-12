@@ -1,0 +1,4 @@
+train:
+  num_epochs: 50
+  data_root: ./data
+  model_save_dir: ./result/mnist_experiment

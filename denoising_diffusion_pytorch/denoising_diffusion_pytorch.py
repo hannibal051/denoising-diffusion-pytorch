@@ -1,10 +1,12 @@
 import math
 import copy
+import numpy as np
 from pathlib import Path
 from random import random
 from functools import partial
 from collections import namedtuple
 from multiprocessing import cpu_count
+import perlin_noise
 
 import torch
 from torch import nn, einsum
@@ -273,7 +275,8 @@ class Unet(nn.Module):
         learned_sinusoidal_dim = 16,
         attn_dim_head = 32,
         attn_heads = 4,
-        full_attn = (False, False, False, True),
+        # full_attn = (False, False, False, True),
+        full_attn = (False, False, False),
         flash_attn = False
     ):
         super().__init__()
@@ -653,7 +656,7 @@ class GaussianDiffusion(nn.Module):
     @torch.inference_mode()
     def p_sample_loop(self, shape, return_all_timesteps = False):
         batch, device = shape[0], self.device
-
+        
         img = torch.randn(shape, device = device)
         imgs = [img]
 
@@ -677,6 +680,15 @@ class GaussianDiffusion(nn.Module):
         times = list(reversed(times.int().tolist()))
         time_pairs = list(zip(times[:-1], times[1:])) # [(T-1, T-2), (T-2, T-3), ..., (1, 0), (0, -1)]
 
+        img_np = np.zeros(shape)
+        for i in range(shape[1]):
+            noise = perlin_noise.PerlinNoise(octaves=10, seed=i)
+            for row in range(shape[2]):
+                for col in range(shape[3]):
+                    for level in range(i):
+                        octa = 2 ** level
+                        img_np[i][0][row][col] += abs(1. / octa * noise([row / 1000. * octa, col / 1000. * octa]))
+        img = torch.from_numpy(np.array(img_np, dtype=np.float32)).to(device = device)
         img = torch.randn(shape, device = device)
         imgs = [img]
 
@@ -833,6 +845,7 @@ class Dataset(Dataset):
     def __getitem__(self, index):
         path = self.paths[index]
         img = Image.open(path)
+        img = img.convert('L')
         return self.transform(img)
 
 # trainer class
@@ -1005,6 +1018,9 @@ class Trainer(object):
 
                 for _ in range(self.gradient_accumulate_every):
                     data = next(self.dl).to(device)
+                    # print(data.shape)
+                    # data = data[:,0,:,:].view(32,1,128,128)
+                    # print(data.shape)
 
                     with self.accelerator.autocast():
                         loss = self.model(data)
