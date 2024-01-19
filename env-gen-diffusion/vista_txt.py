@@ -249,7 +249,7 @@ elif terrain_path[-3:] == 'txt':
 if terrain_path[-3:] == 'tif':
     elevation_image = (elevation_image - np.min(elevation_image)) / (np.max(elevation_image) - np.min(elevation_image)) * 15.
 elif terrain_path[-3:] == 'txt':
-    elevation_image = (elevation_image - np.min(elevation_image)) * 5.
+    elevation_image = (elevation_image - np.min(elevation_image)) * 6.
 
 x = cp.arange(0, len(elevation_image[0]), 1) * 0.1
 y = cp.arange(0, len(elevation_image), 1) * 0.1

@@ -47,6 +47,7 @@ class Editor():
         # 1. denoise the image till t timesteps
         timesteps = torch.full((shape[0],), total_timestep-1, dtype=torch.long, device=x.device)
         noisy_x = self.ddpm.q_sample(x, timesteps)
+        print(torch.var_mean(noisy_x))
         if keep_intermediate:
             intermediate_xs = [noisy_x]
         if mask is None:

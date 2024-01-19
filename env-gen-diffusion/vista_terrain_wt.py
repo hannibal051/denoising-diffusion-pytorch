@@ -41,7 +41,7 @@ elevation_image = (elevation_image / np.max(elevation_image)) * 2. - 1.
 
 coeffs2 = pywt.dwt2(elevation_image, 'bior6.8') # bior6.8
 LL, (LH, HL, HH) = coeffs2
-wave = True
+wave = False
 
 if 1:
     if wave:
@@ -53,7 +53,7 @@ if 1:
     editor = Editor("/home/fish/terrain/denoising-diffusion-pytorch/results/model-190.pt")
     transforms = transforms.ToTensor()
     elevation = transforms(height).to(torch.device("cuda"))
-    ts = torch.tensor([125, 250, 375, 500, 625, 750, 875], device=torch.device("cuda"))
+    ts = torch.tensor([125, 250, 375, 500, 625, 750, 875, 1000], device=torch.device("cuda"))
     repeated_original_data_sample = elevation.unsqueeze(dim=0).repeat(1, 1, 1, 1)
     # we add noises to the denoised sample
     edited_samples = []
@@ -64,11 +64,11 @@ if 1:
     vis_samples = edited_samples
     for id in range(len(vis_samples)):
         if wave:
-            height = vis_samples[i]
-            np.savetxt("./test_imgs/test/"+str(id)+".txt", height)
-        else:
             coeffs2 = [vis_samples[i], (LH, HL, HH)]
             height = pywt.idwt2(coeffs2, 'db8')
+            np.savetxt("./test_imgs/test/"+str(id)+".txt", height)
+        else:
+            height = vis_samples[i]
             np.savetxt("./test_imgs/test/"+str(id)+".txt", height)
 
 x = np.arange(0, len(elevation_image[0]), 1) * 0.1
