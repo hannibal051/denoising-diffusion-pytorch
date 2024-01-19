@@ -62,7 +62,7 @@ def save_sampling_video(sample_seq, output_path, num_forward_steps, steps=None):
     dtheta = 2 * np.pi / total_num_frames 
 
     sample_seq = np.squeeze(sample_seq, axis=1)
-    print(sample_seq.shape)
+    
     T, H, W = sample_seq.shape
     resolution = 0.1
     x = np.arange(0, H*resolution, resolution)
@@ -86,7 +86,7 @@ def save_sampling_video(sample_seq, output_path, num_forward_steps, steps=None):
 
     # Save as mp4 (requires ffmpeg)
     anim.save(output_path, writer='ffmpeg')
-    plt.show()
+    # plt.show()
 
 
 # utility function that visualizes the elevation map in 3D
@@ -141,8 +141,8 @@ def visualize_elevation_map(viz_samples, n_rows=2, n_cols=3, azim=-45, title=Non
                 cmap = cm.viridis
                 # surf = ax.plot_surface(x, y, vis_samples[index] * 2., color='g', linewidth=0, antialiased=False, alpha=0.8, rcount=1280, ccount=1280, edgecolor='none')
             else:
-                surf = ax.plot_surface(x, y, vis_samples[index] * 2., color='g', linewidth=0, antialiased=False, alpha=1, rcount=1280, ccount=1280, edgecolor='none')
-                ax.set_title('Step ' + str(((index + 1) % 19) * 50) + '  lambda ' + str(((index + 1) // 19) * 0.1))
+                surf = ax.plot_surface(x, y, vis_samples[index] * 3., cmap='terrain', linewidth=0, antialiased=False, alpha=1, rcount=1280, ccount=1280, edgecolor='none')
+                # ax.set_title('Step ' + str(((index + 1) % 19) * 50) + '  lambda ' + str(((index + 1) // 19) * 0.1))
             
             ax.grid(False)
             ax.axis('off')

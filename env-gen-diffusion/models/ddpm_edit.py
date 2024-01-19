@@ -61,7 +61,6 @@ class Editor():
         else:
             return self.ddpm.interpolate(x, mask, t = total_timestep, lam = lamb)
 
-
             edited_x = noisy_x.clone()
             # 2. partial reverse process
             for t in tqdm(reversed(range(0, total_timestep)), desc = 'sampling loop time step', total = total_timestep):
