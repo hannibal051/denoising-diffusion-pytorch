@@ -65,7 +65,7 @@ if 1:
     for id in range(len(vis_samples)):
         if wave:
             coeffs2 = [vis_samples[i], (LH, HL, HH)]
-            height = pywt.idwt2(coeffs2, 'db8')
+            height = pywt.idwt2(coeffs2, 'bior6.8')
             np.savetxt("./test_imgs/test/"+str(id)+".txt", height)
         else:
             height = vis_samples[i]
