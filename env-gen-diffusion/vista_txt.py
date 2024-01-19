@@ -238,7 +238,7 @@ def h5_to_vtp(xcoordinates, ycoordinates, vals, surf_name='train_loss', log=Fals
 
     print("Done with file:{}".format(vtp_file))
 
-terrain_path = "/home/fish/terrain/denoising-diffusion-pytorch/env-gen-diffusion/test_imgs/test/1.txt"
+terrain_path = "/home/fish/terrain/denoising-diffusion-pytorch/env-gen-diffusion/test_imgs/test/7.txt"
 # terrain_path = "/home/fish/isaacgym/sim-to-real-offroad/assets/tif/output_hh.tif"
 
 if terrain_path[-3:] == 'tif':
@@ -249,7 +249,7 @@ elif terrain_path[-3:] == 'txt':
 if terrain_path[-3:] == 'tif':
     elevation_image = (elevation_image - np.min(elevation_image)) / (np.max(elevation_image) - np.min(elevation_image)) * 15.
 elif terrain_path[-3:] == 'txt':
-    elevation_image = (elevation_image - np.min(elevation_image)) * 6.
+    elevation_image = (elevation_image - np.min(elevation_image)) * 5.
 
 x = cp.arange(0, len(elevation_image[0]), 1) * 0.1
 y = cp.arange(0, len(elevation_image), 1) * 0.1

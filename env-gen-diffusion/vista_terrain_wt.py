@@ -41,11 +41,15 @@ elevation_image = (elevation_image / np.max(elevation_image)) * 2. - 1.
 
 coeffs2 = pywt.dwt2(elevation_image, 'bior6.8') # bior6.8
 LL, (LH, HL, HH) = coeffs2
-wave = False
+wave = True
 
 if 1:
     if wave:
-        height = LL
+        # height = LL
+        r = len(LL)
+        c = len(LL[0])
+        height = np.zeros((r*4, c*4))
+        height[]
     else:
         height = elevation_image
     rows = len(height)

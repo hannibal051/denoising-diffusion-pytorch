@@ -113,14 +113,14 @@ masks = [np.array(generate_mask(rows, cols, mask_area_ratio[i], elevation)) for 
 true_mask_ratio = []
 for m in masks:
     true_mask_ratio.append(m.sum()/(rows*cols))
-masks = [-torch.from_numpy(mask).view(1, 1, rows, cols).
+masks = [torch.from_numpy(mask).view(1, 1, rows, cols).
          repeat(num_samples, 1, 1, 1).
          to("cuda").float() 
          for mask in masks]
 
 
 # choose 6 different forward steps 
-ts = torch.tensor([875, 875, 875, 875, 875, 875, 875], device=torch.device("cuda"))
+ts = torch.tensor([125, 125, 125, 125, 125, 125, 125], device=torch.device("cuda"))
 # every diffusion step is used to generate 5 samples to test the diversity 
 num_samples = 1
 repeated_original_data_sample = elevation.unsqueeze(dim=0).repeat(num_samples, 1, 1, 1)

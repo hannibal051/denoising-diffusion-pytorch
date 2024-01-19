@@ -60,9 +60,10 @@ class Editor():
                     intermediate_xs.append(edited_x)
             # edited_x = unnormalize_to_zero_to_one(edited_x)
         else:
-            return self.ddpm.interpolate(x, mask, t = total_timestep, lam = lamb)
+            # return self.ddpm.interpolate(x, mask, t = total_timestep, lam = lamb)
 
             edited_x = noisy_x.clone()
+            print(torch.max(mask))
             # 2. partial reverse process
             for t in tqdm(reversed(range(0, total_timestep)), desc = 'sampling loop time step', total = total_timestep):
                 # we sample from the current noisy image to keep the noise level the same as the edited part
