@@ -164,7 +164,7 @@ masks = [torch.from_numpy(mask).view(1, 1, rows, cols).
 
 # choose 6 different forward steps 
 # ts = torch.tensor([125, 125, 125, 125, 125, 125, 125], device=torch.device("cuda"))
-ts = torch.tensor([125], device=torch.device("cuda"))
+ts = torch.tensor([250], device=torch.device("cuda"))
 
 # every diffusion step is used to generate 5 samples to test the diversity 
 num_samples = 1
@@ -172,13 +172,12 @@ repeated_original_data_sample = elevation.unsqueeze(dim=0).repeat(num_samples, 1
 # we add noises to the denoised sample
 edited_samples = []
 for i in range(ts.shape[0]):
-    edited_x = editor(repeated_original_data_sample, ts[i:i+1].item(), keep_intermediate=False, mask=masks[i], lamb=0.9 - 0.1*i)
+    edited_x = editor(repeated_original_data_sample, ts[i:i+1].item(), keep_intermediate=False, mask=masks[i], lamb=0.1)
     edited_samples.append(edited_x[0].cpu().detach().numpy().reshape(rows, cols))
 
-vis_samples = edited_samples
+# for i in range(len(edited_samples)):
+#     mask_i = masks[i].cpu().numpy()[0][0]
+#     edited_samples[i] = np.multiply(elevation.cpu().numpy()[0], 1 - mask_i) + np.multiply(edited_samples[i], mask_i)
 
-
-for id in range(len(vis_samples)):
-    elevation_image = vis_samples[i]
-
-    np.savetxt("./test_imgs/test/"+str(id)+".txt", elevation_image)
+for id in range(len(edited_samples)):
+    np.savetxt("./test_imgs/test/"+str(id)+".txt", edited_samples[id])

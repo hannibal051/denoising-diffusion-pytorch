@@ -44,7 +44,7 @@ class Editor():
         The output is the edited image normalized to [0, 1], and the input should be normalized to [-1, 1]. 
         """
         shape = x.shape
-        # 1. denoise the image till t timesteps
+        # 1. noise the image till T timesteps
         timesteps = torch.full((shape[0],), total_timestep-1, dtype=torch.long, device=x.device)
         noisy_x = self.ddpm.q_sample(x, timesteps)
         print(torch.var_mean(noisy_x))
@@ -68,11 +68,13 @@ class Editor():
                 # we sample from the current noisy image to keep the noise level the same as the edited part
                 noise = torch.randn_like(x)
                 edited_x, _ = self.p_sample_with_noise(edited_x, t, noise)
-                timesteps = torch.full((shape[0],), t, dtype=torch.long, device=x.device)
-                # if t > 0:
-                #     non_edited_x = self.ddpm.q_sample(x, timesteps, noise)
-                # else:
-                non_edited_x = x 
+                # edited_x, _ = self.ddpm.p_sample(edited_x, t, None)
+                
+                if t > 0:
+                    timesteps = torch.full((shape[0],), t-1, dtype=torch.long, device=x.device)
+                    non_edited_x = self.ddpm.q_sample(x, timesteps)
+                else:
+                    non_edited_x = x 
                 edited_x = non_edited_x * (1 - mask) + edited_x * mask
                 if keep_intermediate:
                     intermediate_xs.append(edited_x)
