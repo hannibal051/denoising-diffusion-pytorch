@@ -36,6 +36,7 @@ def save_sampling_video(sample_seq, output_path, num_forward_steps, steps=None):
     
     def update(t):
         ax.clear()
+        ax.set_facecolor('#565656')
         i = t // rendered_diffusion_interval
         if i < num_forward_steps:
             z = elevation_map(i)
@@ -48,13 +49,13 @@ def save_sampling_video(sample_seq, output_path, num_forward_steps, steps=None):
             
         surface = ax.plot_surface(x, y, z * 2, cmap='turbo', linewidth=0, antialiased=False, alpha=1, rcount=1280, ccount=1280, edgecolor='none')
         ax.set_aspect('equal')
-        azim = -np.pi# + t * dtheta
+        azim = -np.pi + t * dtheta
         set_camera_angle(ax, elev=45, azim=np.degrees(azim))
 #         update_colorbar_limits_and_cmap(fig, surface, z)
         return surface,
 
     # video-related parameters
-    video_time = 15 # 15 second
+    video_time = 10 # 15 second
     fps = 60 # 60 frame per second
     dt = 1.0 / fps * 1000 # in ms
     total_num_frames = video_time * fps

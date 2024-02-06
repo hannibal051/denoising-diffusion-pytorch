@@ -60,7 +60,7 @@ class Editor():
                     intermediate_xs.append(edited_x)
             # edited_x = unnormalize_to_zero_to_one(edited_x)
         else:
-            # return self.ddpm.interpolate(x, mask, t = total_timestep, lam = lamb)
+            return self.ddpm.interpolate(x, mask, t = total_timestep, lam = lamb)
 
             edited_x = noisy_x.clone()
             # 2. partial reverse process
